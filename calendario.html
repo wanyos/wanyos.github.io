@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario</title>
+  <link rel="stylesheet" href="normalize.css"/>
+  <link rel="stylesheet" href="estilos-calendario.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="normalize.css"/>
+</head>
+<body>
+   <div class="container">
+
+    <header>
+      <h1>Calendario libres emt</h1>
+    </header>
+
+    <nav>
+      <div class="year">
+        <label for="txt_year">Año</label>
+        <input class="txt_year" type="number" id="txt_year" name="txt_year" min="2020" max="2050" value="2020"/>
+      </div>
+      <div class="grupo">
+        <label>Grupo</label>
+        <select id="cbo_grupo" name="cbo_grupo">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      <div class="subgrupo">
+        <label>Subgrupo</label>
+        <select id="cbo_subgrupo" name="cbo_subgrupo">
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+          <option value="H">H</option>
+        </select>
+      </div>
+      <input id="btn_buscar" class="btn" type="submit" name="btn" value="Buscar"/>
+    </nav>
+    
+    <main>
+    <div id="t_calendario" class="tabla-calendario">
+
+      <div class="enero">
+       <h4>Enero</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="febrero">
+        <h4>Febrero</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="marzo">
+        <h4>Marzo</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="abril">
+        <h4>Abril</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="mayo">
+        <h4>Mayo</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="junio">
+        <h4>Junio</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="julio">
+        <h4>Julio</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="agosto">
+        <h4>Agosto</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="septiembre">
+        <h4>Septiembre</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="octubre">
+        <h4>Octubre</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="noviembre">
+        <h4>Noviembre</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+      <div class="diciembre">
+        <h4>Diciembre</h4> 
+       <div class="dates_week"></div>
+      </div>
+
+    </div>
+    </main>
+
+    <footer>
+        <h3 class="libres">Libres</h3>
+        <h3 class="sub">Subgrupo</h3>
+        <h3 class="sub1">Grupo(A-C-E-G)</h3>
+        <h3 class="sub2">Grupo(B-D-F-H)</h3>
+    </footer>
+
+   </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
