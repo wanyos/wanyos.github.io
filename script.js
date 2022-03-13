@@ -23,7 +23,7 @@ const fechas_grupos = [new Date('2020-01-01'), new Date('2020-01-03'), new Date(
 /*Escribe el calendario con la fecha actual del sistema */
 writeMonths();
 
-
+/**Es llamada cada vez que pulsamos 'buscar' e inicia un nuevo calendario */
 function writeMonths() {
   let year = currentDate.getFullYear();
   let grupo = cbo_grupo.value;
