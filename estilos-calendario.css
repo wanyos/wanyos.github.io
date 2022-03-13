@@ -17,21 +17,18 @@ body{
 }
 
 .container{
-  position: relative;
-  background-color: lightskyblue;
+  background-color: #0c4a70;
   width: 90%;
-  overflow: hidden;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  opacity: 0.4;
+  opacity: 0.8;
 }
 
 h1{
   text-align: center;
   text-transform: uppercase;
   padding-top: 15px;
+  color: white;
 }
 
 nav{
@@ -44,15 +41,16 @@ nav{
   font-size: 1.1rem;
   border-bottom: 2px solid black;
   padding-bottom: 1em;
+  color: rgb(214, 209, 209);
 }
 
 nav .txt_year{
-  background: lightskyblue;
+  background: white;
   text-align: center;
 }
 
 nav .btn{
-  background-color: lightskyblue;
+  background-color: white;
   border-radius: 10px;
   padding-left: 0.2em;
   padding-right: 0.2em;
@@ -67,12 +65,12 @@ nav .subgrupo{
 }
 
 nav .btn:hover{
-  color: white;
+  color: lime;
 }
 
 select{
   margin-left: 7px;
-  background-color: lightskyblue;
+  background-color: white;
 }
 
 .tabla-calendario{
@@ -81,8 +79,6 @@ select{
   height: 100%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 1em;
-  margin-bottom: 1em;
   padding: 1em;
   display: grid;
   grid-template-columns: repeat(3, minmax(9em, 1fr));
@@ -92,7 +88,7 @@ select{
 }
 
 .tabla-calendario div{
-  background-color: azure;
+  background-color: rgb(56, 93, 161);
   width: 13em;
 }
 
@@ -109,9 +105,12 @@ select{
   grid-template-columns: repeat(7, 1fr);
   justify-content: center;
   justify-items: center;
+  color: rgb(214, 209, 209);
 }
 
-
+h4, .color_dias{
+  color: rgb(214, 209, 209);
+}
 
 footer {
   position: fixed;
@@ -128,19 +127,19 @@ footer h3{
 }
 
 .libres{
-  background-color:limegreen;
+  color: rgb(105, 247, 105);
 }
 
 .sub{
-  background-color: grey;
+  color: rgb(32, 29, 29);
 }
 
 .sub1{
-  background-color: yellow;
+  color: yellow;
 }
 
 .sub2{
-  background-color: aqua;
+  color: aqua;
 }
 
 
