@@ -18,7 +18,6 @@ let total_trabajo;
 let indice_trabajo;
 let secuencia_trabajo;
 let primer_libre_mes;
-
 const fechas_grupos = [new Date('2020-01-01'), new Date('2020-01-03'), new Date('2020-01-04'), new Date('2020-01-05'), new Date('2020-01-08')];
 
 /*Escribe el calendario con la fecha actual del sistema */
