@@ -20,6 +20,28 @@ let secuencia_trabajo;
 let primer_libre_mes;
 const fechas_grupos = [new Date('2020-01-01'), new Date('2020-01-03'), new Date('2020-01-04'), new Date('2020-01-05'), new Date('2020-01-08')];
 
+//arrays para el calculo de los dias subgrupo
+//se cambian los subgrupos a partir del año 2020
+//se crea un array por cada grupo y cada posición del array corresponde a su letra a,b,c,d...
+//se guarda en cada posición la fecha de inicio de su respectiva letra
+const grupo1 = [new Date(2020, 2, 4), new Date(2020, 1, 3), new Date(2020, 0, 9), new Date(2020, 1, 13),
+  new Date(2020, 2, 19), new Date(2020, 1, 4), new Date(2020, 2, 10), new Date(2020, 0, 29)];
+  
+  const grupo2 = [new Date(2020, 1, 26), new Date(2020, 0, 27), new Date(2020, 0, 2), new Date(2020, 1, 6),
+  new Date(2020, 2, 12), new Date(2020, 0, 28), new Date(2020, 2, 3), new Date(2020, 0, 22)];
+  
+  const grupo3 = [new Date(2020, 1, 19), new Date(2020, 2, 25), new Date(2020, 1, 24), new Date(2020, 0, 30),
+  new Date(2020, 2, 5), new Date(2020, 0, 21), new Date(2020, 1, 25), new Date(2020, 0, 15)];
+  
+  const grupo4 = [new Date(2020, 1, 12), new Date(2020, 0, 13), new Date(2020, 1, 17), new Date(2020, 1, 23),
+  new Date(2020, 1, 27), new Date(2020, 0, 14), new Date(2020, 1, 18), new Date(2020, 2, 24)];
+  
+  const grupo5 = [new Date(2020, 1, 5), new Date(2020, 2, 11), new Date(2020, 1, 10), new Date(2020, 2, 16),
+  new Date(2020, 1, 20), new Date(2020, 2, 26), new Date(2020, 1, 11), new Date(2020, 2, 17)];
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 /*Escribe el calendario con la fecha actual del sistema */
 writeMonths();
 
@@ -33,17 +55,21 @@ function writeMonths() {
   txt_year.value = year;
 
   //resetear las variables para los libres
-  restablecerVariablesLibres(year, grupo, subgrupo);
+  restablecerVariablesLibres(year, grupo);
+
+   //obtener la lista de dias subgrupo del año
+   const lista_dias_subgrupo = getListaDiasSubgrupo(grupo, subgrupo, year);
 
   //escribir en cada mes sus dias de la semana
   let com;
+  let dia_subgrupo = null;
   for (let a = 0; a < tabla.length; a++) {
     com = tabla[a];
 
     //añade las etiquetas del día de la semana
     for (let i = 0; i < dias_semana.length; i++) {
       com.innerHTML += ` <div class="dates_week color_dias"> ${dias_semana[i]} </div> `;
-    }
+    } 
 
     //deja los espacios en blanco antes de escribir el día 1 de cada mes
     let dia_inicial = startDay(a + 1);
@@ -53,29 +79,34 @@ function writeMonths() {
 
     //escribe los números de los días
     let total_dias_mes = getTotalDays(a + 1);
-    let tipo_dia;
+    
     for (let i = 1; i <= total_dias_mes; i++) {
+      let tipo_dia;
+
       //si son libres se le añade la clase libres
       tipo_dia = establecerLibres(a, i);
         
-      //si son subgrupo clase sub
+      //si son subgrupo clase sub, el tipo_dia no debe estar definido como libre
         if(tipo_dia == undefined){
-          
+          if(dia_subgrupo == undefined){
+              dia_subgrupo = lista_dias_subgrupo.shift();
+          }
+          tipo_dia = comprobarDiaSubgrupo(dia_subgrupo, a, i);  //dia, mes, dia_del_mes
+          if(tipo_dia != undefined){
+            dia_subgrupo = undefined;
+          }
         }
 
       //para los subgrupos de fines de semana amarillo=sub1 azul=sub2
+      if(tipo_dia == undefined){
+
+      }
         
       com.innerHTML += ` <div class="dates_week ${tipo_dia}">${i}</div> `;
     }
   }
 }
 
-
-
-/**Calcula el ciclo de dias de trabajo que hay entre libres */
-function getCicloDiasTrabajo() {
-
-}
 
 
 
@@ -118,7 +149,7 @@ function establecerLibres(a, i) {
 /**
  * Inicia las variables que se usan para el calculo de libres
  */
-function restablecerVariablesLibres(year, grupo, subgrupo) {
+function restablecerVariablesLibres(year, grupo) {
   primer_libre_mes = false;
   let fecha_grupo_2020 = getFechaGrupo(year, grupo);
   let fecha_init = getFechaInitLibre(fecha_grupo_2020);
@@ -201,6 +232,178 @@ function getFechaInitLibre(fecha_grupo) {
     }
   } while (continuar);
   return fecha_grupo;
+}
+
+
+
+/**---------------------------------------------------  Calculos Dias Subgrupo --------------------------------------- */
+
+/**
+ * Comprueba si es un dia de subgrupo, si es asi se le añade la classe del css que pinta los dias subgrupo
+ * @param {*} dia_subgrupo 
+ * @param {*} a 
+ * @param {*} i 
+ */
+ function comprobarDiaSubgrupo(dia_subgrupo, a, i){
+    let dia = new Date(dia_subgrupo);
+    let mes = dia.getMonth();
+    let dia_mes = dia.getDate();
+    if(mes == a && dia_mes == i){
+        return 'sub';
+    }
+    return undefined;
+}
+
+
+/**
+* Se cambian los dias de subgrupo apartir del año 2020
+* calcula le primer día de subgrupo y va añdiendo a la lista el resto de dias del año
+* @param grupo_libres (int)
+* @param letra        (String)
+* @param year         (int)
+* @return lista de fechas con los dias de subgrupo
+*/
+function getListaDiasSubgrupo(grupo_libres, letra, year) {
+  const lista_subgrupo = [];
+  //distancias entre dias, la secuencia de dias es jueves, lunes, miercoles y martes
+  //el array sigue la misma secuencia
+  let secu = [60, 65, 76, 79];
+  let l = getLetraSubgrupo(letra);
+  let fecha_init_subgrupo = getFechaSubgrupoNuevo(grupo_libres, l);         //obtiene la primera fecha subgrupo del año 2020
+  let fecha_init = getFechaInitYearSubgrupo(fecha_init_subgrupo, year);     //calcula el primer libre subgrupo del año del parametro
+  let day = fecha_init.getDay();
+
+  let contador = 0;
+  if (day == 1) {
+    contador = 1;
+  }
+  if (day == 3) {
+    contador = 2;
+  }
+  if (day == 2) {
+    contador = 3;
+  }
+  //si es jueves contador vale 0
+  while (fecha_init.getFullYear() == year) {
+    if (contador > 3) {
+      contador = 0;
+    }
+    lista_subgrupo.push(new Date(fecha_init));
+    fecha_init.setDate(fecha_init.getDate() + (secu[contador++]));
+  }
+  return lista_subgrupo;
+}
+
+
+/**
+     * el valor de letra referencia la poaisción en el array
+     * @param grupo
+     * @param letra
+     * @return 
+     */
+function getFechaSubgrupoNuevo(grupo, letra) {
+  let fecha;
+    switch (grupo) {
+      case "1":
+        fecha = grupo1[letra];
+        break;
+      case "2":
+        fecha = grupo2[letra];
+        break;
+      case "3":
+        fecha = grupo3[letra];
+        break;
+      case "4":
+        fecha = grupo4[letra];
+        break;
+      case "5":
+        fecha = grupo5[letra];
+        break;
+    }
+  return fecha;
+}
+
+
+/**
+     * La fecha_init es la primera fecha del subgrupo del año 2020
+     * El year es el año que vamos a calcular
+     * @param fecha_init
+     * @param year
+     * @return la primera fecha del subgrupo ese año(year)
+     */
+function getFechaInitYearSubgrupo(fecha_init_subgrupo, year) {
+  //secuencia de días que hay que retroceder
+  //de jueves a martes, de martes a miércoles, de miércoles a lunes
+  let secu = [79, 76, 65, 60];
+  //se crea el día del año que queremos calcular
+  let fecha_fin = new Date(year, 0, 1);
+
+  if (year == 2020) {
+    return fecha_init_subgrupo;
+  } else {
+    let dias = (fecha_fin.getTime() - fecha_init_subgrupo.getTime());
+    dias /= (1000 * 60 * 60 * 24);
+    let re = parseFloat(dias / 280);
+    let p_dec = parseFloat(re % 1);
+    let t_dias = parseFloat((2.8 * (1 - p_dec)) * 100);
+    fecha_fin.setDate(fecha_fin.getDate() + Math.round(t_dias));
+    //devuelve la fecha que corresponde al día que se inicia en el 2020
+    //pero en el año que se quiere calcular pueden existir fechas anteriores
+    let contador = 0;
+    if (fecha_fin.getDay() == 2) {
+      contador = 1;
+    }
+    if (fecha_fin.getDay() == 3) {
+      contador = 2;
+    }
+    if (fecha_fin.getDay() == 1) {
+      contador = 3;
+    }
+    let continuar = true;
+    while (continuar) {
+      if (contador > 3) {
+        contador = 0;
+      }
+      let dias_descontar = secu[contador++];
+      fecha_fin.setDate(fecha_fin.getDate() - dias_descontar);
+      if (fecha_fin.getFullYear() != year) {
+        fecha_fin.setDate(fecha_fin.getDate() + dias_descontar);
+        continuar = false;
+      }
+    }
+  }
+  return fecha_fin;
+}
+
+function getLetraSubgrupo(letra) {
+  let l;
+  switch (letra) {
+      case "A":
+          l = 0;
+          break;
+      case "B":
+          l = 1;
+          break;
+      case "C":
+          l = 2;
+          break;
+      case "D":
+          l = 3;
+          break;
+      case "E":
+          l = 4;
+          break;
+      case "F":
+          l = 5;
+          break;
+      case "G":
+          l = 6;
+          break;
+      case "H":
+          l = 7;
+          break;
+  }
+  return l;
 }
 
 

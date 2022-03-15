@@ -130,11 +130,12 @@ footer {
 
 
 .libres{
-  color: rgb(105, 247, 105);
+  color: lime;
 }
 
 .sub{
-  color: rgb(32, 29, 29);
+  /*color: rgb(32, 29, 29);*/
+  color: black;
 }
 
 .sub1{
@@ -142,7 +143,7 @@ footer {
 }
 
 .sub2{
-  color: aqua;
+  color: blue;
 }
 
 
