@@ -40,6 +40,16 @@ const grupo1 = [new Date(2020, 2, 4), new Date(2020, 1, 3), new Date(2020, 0, 9)
   new Date(2020, 1, 20), new Date(2020, 2, 26), new Date(2020, 1, 11), new Date(2020, 2, 17)];
 
 
+
+  //sábados de subgrupos comunes a dos grupos A-C-E-G y B-D-F-H a partir del 2020
+//las posiciones en el array están en el mismo orden
+const sub_comunes_g1 = [new Date(2020,1,29), new Date(2020,0,25)];
+const sub_comunes_g2 = [new Date(2020,1,22), new Date(2020,0,18)];
+const sub_comunes_g3 = [new Date(2020,1,15), new Date(2020,0,11)];
+const sub_comunes_g4 = [new Date(2020,1,8), new Date(2020,0,4)];
+const sub_comunes_g5 = [new Date(2020,1,1), new Date(2020,2,7)];
+
+
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /*Escribe el calendario con la fecha actual del sistema */
@@ -60,9 +70,13 @@ function writeMonths() {
    //obtener la lista de dias subgrupo del año
    const lista_dias_subgrupo = getListaDiasSubgrupo(grupo, subgrupo, year);
 
+   //obtener lista con los dias subgrupo comunes
+   const lista_dias_subgrupo_comunes = getSubgrupoComunes(grupo, subgrupo, year);
+
   //escribir en cada mes sus dias de la semana
   let com;
-  let dia_subgrupo = null;
+  let dia_subgrupo = undefined;
+  let dia_subgrupo_comun = undefined;
   for (let a = 0; a < tabla.length; a++) {
     com = tabla[a];
 
@@ -97,9 +111,15 @@ function writeMonths() {
           }
         }
 
-      //para los subgrupos de fines de semana amarillo=sub1 azul=sub2
+      //para los subgrupos de fines de semana amarillo=sub1 naranja=sub2
       if(tipo_dia == undefined){
-
+        if(dia_subgrupo_comun == undefined){
+            dia_subgrupo_comun = lista_dias_subgrupo_comunes.shift();
+        }
+        tipo_dia = comprobarDiaSubgrupoComun(dia_subgrupo_comun, a, i, subgrupo);
+        if(tipo_dia != undefined){
+          dia_subgrupo_comun = undefined;
+        }
       }
         
       com.innerHTML += ` <div class="dates_week ${tipo_dia}">${i}</div> `;
@@ -406,6 +426,117 @@ function getLetraSubgrupo(letra) {
   return l;
 }
 
+
+
+/**---------------------------------------------------  Calculos Dias Subgrupo Comunes --------------------------------------- */
+
+/**
+ * Establece si es un sabado subgrupo comun
+ * A-C-E-G = yellow     B-D-F-H = azul
+ * @param {*} dia_subgrupo_comun 
+ * @param {*} a 
+ * @param {*} i 
+ * @param {*} letra 
+ * @returns 
+ */
+function comprobarDiaSubgrupoComun(dia_subgrupo_comun, a, i, letra) {
+  let dia = new Date(dia_subgrupo_comun);
+  let mes = dia.getMonth();
+  let dia_mes = dia.getDate();
+  if (mes == a && dia_mes == i) {
+    if(letra == "A" || letra == "C" || letra == "E" || letra == "G"){
+      return 'sub1';
+    } else if(letra == "B" || letra == "D" || letra == "F" || letra == "H"){
+      return 'sub2';
+    } 
+  }
+  return undefined;
+}
+
+
+/**
+     * Se calcula los libres comunes a los grupos en dos conjuntos, siempre es un sábado
+     * @param grupo
+     * @param letra
+     * @param year
+     * @return lista de fechas con los dias subgrupos comunes
+     */
+ function getSubgrupoComunes(grupo, letra, year) {
+  const lista_sub_comunes = [];
+  let fecha_init_sub_comunes = new Date(getFechaInitSubComun(grupo, letra, year));
+  while (fecha_init_sub_comunes.getFullYear() == year) {
+      lista_sub_comunes.push(new Date(fecha_init_sub_comunes));
+      fecha_init_sub_comunes.setDate(fecha_init_sub_comunes.getDate() + 70);
+  }
+  return lista_sub_comunes;
+}
+
+
+/**
+* Calcula la primera fecha donde se debe comenzar a calcular los libres comunes
+* Si es el año 2020 se envia la primera fecha del grupo correspondiente
+* @param grupo
+* @param letra
+* @param year
+* @return 
+*/
+function getFechaInitSubComun(grupo, letra, year) {
+  let fecha_init_sub_comunes = new Date(getFechaSubComunes(grupo, letra));
+  let fecha_fin_sub_comunes = new Date(year, 0, 1);
+
+  if (year == 2020) {
+      return fecha_init_sub_comunes;
+  } else {
+    let diff = (fecha_fin_sub_comunes.getTime() - fecha_init_sub_comunes.getTime()) / 1000;
+    diff /= (60 * 60 * 24);
+      let re = parseFloat(diff / 70); 
+      let p_dec = parseFloat(re % 1);
+      let t_dias = parseFloat((0.7 * (1 - p_dec)) * 100); 
+    fecha_fin_sub_comunes.setDate(fecha_fin_sub_comunes.getDate() + Math.round(t_dias));
+      
+    //devuelve la fecha que corresponde al día que se inicia en el 2020
+    //pero en el año que se quiere calcular pueden existir fechas anteriores
+    let continuar = true;
+    let nueva_fecha = new Date(fecha_fin_sub_comunes);
+    do {
+         nueva_fecha.setDate(fecha_fin_sub_comunes.getDate() - 70);
+      if (nueva_fecha.getFullYear() == fecha_fin_sub_comunes.getFullYear()) {
+        fecha_fin_sub_comunes = new Date(nueva_fecha);
+      } else {
+        continuar = false;
+      }
+    } while (continuar);
+}
+  return fecha_fin_sub_comunes;
+}
+
+
+function getFechaSubComunes(grupo, letra){
+  let fecha;
+  let pos = 0;
+  //A-C-E-G = 0   B-D-F-H=1
+  if(letra == ("B") || letra == ("D") || letra == ("F") || letra == ("H")){
+      pos = 1;
+  }
+      switch(grupo){
+          case "1":
+              fecha = sub_comunes_g1[pos];
+              break;
+          case "2":
+              fecha = sub_comunes_g2[pos];
+              break;
+          case "3":
+              fecha = sub_comunes_g3[pos];
+              break;
+          case "4":
+              fecha = sub_comunes_g4[pos];
+              break;
+          case "5":
+              fecha = sub_comunes_g5[pos];
+              break;
+      }
+  return fecha;
+}
 
 
 /**---------------------------------------------------  Calculos Calendario --------------------------------------- */
