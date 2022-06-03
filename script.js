@@ -21,9 +21,9 @@ let primer_libre_mes;
 const fechas_grupos = [new Date('2020-01-01'), new Date('2020-01-03'), new Date('2020-01-04'), new Date('2020-01-05'), new Date('2020-01-08')];
 
 //arrays para el calculo de los dias subgrupo
-//se cambian los subgrupos a partir del año 2020
-//se crea un array por cada grupo y cada posición del array corresponde a su letra a,b,c,d...
-//se guarda en cada posición la fecha de inicio de su respectiva letra
+//se cambian los subgrupos a partir del anyo 2020
+//se crea un array por cada grupo y cada posicion del array corresponde a su letra a,b,c,d...
+//se guarda en cada posicion la fecha de inicio de su respectiva letra
 const grupo1 = [new Date(2020, 2, 4), new Date(2020, 1, 3), new Date(2020, 0, 9), new Date(2020, 1, 13),
   new Date(2020, 2, 19), new Date(2020, 1, 4), new Date(2020, 2, 10), new Date(2020, 0, 29)];
   
@@ -41,8 +41,8 @@ const grupo1 = [new Date(2020, 2, 4), new Date(2020, 1, 3), new Date(2020, 0, 9)
 
 
 
-  //sábados de subgrupos comunes a dos grupos A-C-E-G y B-D-F-H a partir del 2020
-//las posiciones en el array están en el mismo orden
+  //sabados de subgrupos comunes a dos grupos A-C-E-G y B-D-F-H a partir del 2020
+//las posiciones en el array estan en el mismo orden
 const sub_comunes_g1 = [new Date(2020,1,29), new Date(2020,0,25)];
 const sub_comunes_g2 = [new Date(2020,1,22), new Date(2020,0,18)];
 const sub_comunes_g3 = [new Date(2020,1,15), new Date(2020,0,11)];
@@ -52,87 +52,9 @@ const sub_comunes_g5 = [new Date(2020,1,1), new Date(2020,2,7)];
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-/*Escribe el calendario con la fecha actual del sistema */
-writeMonths();
-
-/**Es llamada cada vez que pulsamos 'buscar' e inicia un nuevo calendario */
-function writeMonths() {
-  let year = currentDate.getFullYear();
-  let grupo = cbo_grupo.value;
-  let subgrupo = cbo_subgrupo.value;
-
-  //establee el año fecha del sistema
-  txt_year.value = year;
-
-  //resetear las variables para los libres
-  restablecerVariablesLibres(year, grupo);
-
-   //obtener la lista de dias subgrupo del año
-   const lista_dias_subgrupo = getListaDiasSubgrupo(grupo, subgrupo, year);
-
-   //obtener lista con los dias subgrupo comunes
-   const lista_dias_subgrupo_comunes = getSubgrupoComunes(grupo, subgrupo, year);
-
-  //escribir en cada mes sus dias de la semana
-  let com;
-  let dia_subgrupo = undefined;
-  let dia_subgrupo_comun = undefined;
-  for (let a = 0; a < tabla.length; a++) {
-    com = tabla[a];
-
-    //añade las etiquetas del día de la semana
-    for (let i = 0; i < dias_semana.length; i++) {
-      com.innerHTML += ` <div class="dates_week color_dias"> ${dias_semana[i]} </div> `;
-    } 
-
-    //deja los espacios en blanco antes de escribir el día 1 de cada mes
-    let dia_inicial = startDay(a + 1);
-    for (let i = dia_inicial; i > 0; i--) {
-      com.innerHTML += ` <div class="dates_week"></div> `;
-    }
-
-    //escribe los números de los días
-    let total_dias_mes = getTotalDays(a + 1);
-    
-    for (let i = 1; i <= total_dias_mes; i++) {
-      let tipo_dia;
-
-      //si son libres se le añade la clase libres
-      tipo_dia = establecerLibres(a, i);
-        
-      //si son subgrupo clase sub, el tipo_dia no debe estar definido como libre
-        if(tipo_dia == undefined){
-          if(dia_subgrupo == undefined){
-              dia_subgrupo = lista_dias_subgrupo.shift();
-          }
-          tipo_dia = comprobarDiaSubgrupo(dia_subgrupo, a, i);  //dia, mes, dia_del_mes
-          if(tipo_dia != undefined){
-            dia_subgrupo = undefined;
-          }
-        }
-
-      //para los subgrupos de fines de semana amarillo=sub1 naranja=sub2
-      if(tipo_dia == undefined){
-        if(dia_subgrupo_comun == undefined){
-            dia_subgrupo_comun = lista_dias_subgrupo_comunes.shift();
-        }
-        tipo_dia = comprobarDiaSubgrupoComun(dia_subgrupo_comun, a, i, subgrupo);
-        if(tipo_dia != undefined){
-          dia_subgrupo_comun = undefined;
-        }
-      }
-        
-      com.innerHTML += ` <div class="dates_week ${tipo_dia}">${i}</div> `;
-    }
-  }
-}
-
-
-
-
 /**---------------------------------------------------  Calculos Libres --------------------------------------- */
 /**
- * Establece si un día es un libre 
+ * Establece si un dia es un libre 
  * @param {*} a equivale al mes
  * @param {*} i equivale al dia del mes
  * @returns clase libres para colorear el dia en verde
@@ -220,7 +142,7 @@ function getFechaGrupo(year, grupo) {
 }
 
 
-/**Calcula la primera fecha del año que se empieza a librar por su grupo */
+/**Calcula la primera fecha del anyo que se empieza a librar por su grupo */
 function getFechaInitLibre(fecha_grupo) {
   let nueva_fecha = new Date(fecha_grupo);
   let retroceso = new Array(2);
@@ -259,7 +181,7 @@ function getFechaInitLibre(fecha_grupo) {
 /**---------------------------------------------------  Calculos Dias Subgrupo --------------------------------------- */
 
 /**
- * Comprueba si es un dia de subgrupo, si es asi se le añade la classe del css que pinta los dias subgrupo
+ * Comprueba si es un dia de subgrupo, si es asi se le anade la classe del css que pinta los dias subgrupo
  * @param {*} dia_subgrupo 
  * @param {*} a 
  * @param {*} i 
@@ -276,8 +198,8 @@ function getFechaInitLibre(fecha_grupo) {
 
 
 /**
-* Se cambian los dias de subgrupo apartir del año 2020
-* calcula le primer día de subgrupo y va añdiendo a la lista el resto de dias del año
+* Se cambian los dias de subgrupo apartir del ano 2020
+* calcula le primer dia de subgrupo y va andiendo a la lista el resto de dias del anyo
 * @param grupo_libres (int)
 * @param letra        (String)
 * @param year         (int)
@@ -289,8 +211,8 @@ function getListaDiasSubgrupo(grupo_libres, letra, year) {
   //el array sigue la misma secuencia
   let secu = [60, 65, 76, 79];
   let l = getLetraSubgrupo(letra);
-  let fecha_init_subgrupo = getFechaSubgrupoNuevo(grupo_libres, l);         //obtiene la primera fecha subgrupo del año 2020
-  let fecha_init = getFechaInitYearSubgrupo(fecha_init_subgrupo, year);     //calcula el primer libre subgrupo del año del parametro
+  let fecha_init_subgrupo = getFechaSubgrupoNuevo(grupo_libres, l);         //obtiene la primera fecha subgrupo del anyo 2020
+  let fecha_init = getFechaInitYearSubgrupo(fecha_init_subgrupo, year);     //calcula el primer libre subgrupo del anyo del parametro
   let day = fecha_init.getDay();
 
   let contador = 0;
@@ -316,7 +238,7 @@ function getListaDiasSubgrupo(grupo_libres, letra, year) {
 
 
 /**
-     * el valor de letra referencia la poaisción en el array
+     * el valor de letra referencia la poaiscion en el array
      * @param grupo
      * @param letra
      * @return 
@@ -345,17 +267,17 @@ function getFechaSubgrupoNuevo(grupo, letra) {
 
 
 /**
-     * La fecha_init es la primera fecha del subgrupo del año 2020
-     * El year es el año que vamos a calcular
+     * La fecha_init es la primera fecha del subgrupo del anyo 2020
+     * El year es el anyo que vamos a calcular
      * @param fecha_init
      * @param year
-     * @return la primera fecha del subgrupo ese año(year)
+     * @return la primera fecha del subgrupo ese anyo(year)
      */
 function getFechaInitYearSubgrupo(fecha_init_subgrupo, year) {
-  //secuencia de días que hay que retroceder
-  //de jueves a martes, de martes a miércoles, de miércoles a lunes
+  //secuencia de dias que hay que retroceder
+  //de jueves a martes, de martes a miercoles, de miercoles a lunes
   let secu = [79, 76, 65, 60];
-  //se crea el día del año que queremos calcular
+  //se crea el dia del anyo que queremos calcular
   let fecha_fin = new Date(year, 0, 1);
 
   if (year == 2020) {
@@ -367,8 +289,8 @@ function getFechaInitYearSubgrupo(fecha_init_subgrupo, year) {
     let p_dec = parseFloat(re % 1);
     let t_dias = parseFloat((2.8 * (1 - p_dec)) * 100);
     fecha_fin.setDate(fecha_fin.getDate() + Math.round(t_dias));
-    //devuelve la fecha que corresponde al día que se inicia en el 2020
-    //pero en el año que se quiere calcular pueden existir fechas anteriores
+    //devuelve la fecha que corresponde al dia que se inicia en el 2020
+    //pero en el anyo que se quiere calcular pueden existir fechas anteriores
     let contador = 0;
     if (fecha_fin.getDay() == 2) {
       contador = 1;
@@ -455,7 +377,7 @@ function comprobarDiaSubgrupoComun(dia_subgrupo_comun, a, i, letra) {
 
 
 /**
-     * Se calcula los libres comunes a los grupos en dos conjuntos, siempre es un sábado
+     * Se calcula los libres comunes a los grupos en dos conjuntos, siempre es un sabado
      * @param grupo
      * @param letra
      * @param year
@@ -474,7 +396,7 @@ function comprobarDiaSubgrupoComun(dia_subgrupo_comun, a, i, letra) {
 
 /**
 * Calcula la primera fecha donde se debe comenzar a calcular los libres comunes
-* Si es el año 2020 se envia la primera fecha del grupo correspondiente
+* Si es el anyo 2020 se envia la primera fecha del grupo correspondiente
 * @param grupo
 * @param letra
 * @param year
@@ -494,8 +416,8 @@ function getFechaInitSubComun(grupo, letra, year) {
       let t_dias = parseFloat((0.7 * (1 - p_dec)) * 100); 
     fecha_fin_sub_comunes.setDate(fecha_fin_sub_comunes.getDate() + Math.round(t_dias));
       
-    //devuelve la fecha que corresponde al día que se inicia en el 2020
-    //pero en el año que se quiere calcular pueden existir fechas anteriores
+    //devuelve la fecha que corresponde al dia que se inicia en el 2020
+    //pero en el anyo que se quiere calcular pueden existir fechas anteriores
     let continuar = true;
     let nueva_fecha = new Date(fecha_fin_sub_comunes);
     do {
@@ -552,7 +474,7 @@ function getTotalDays(month) {
   }
 }
 
-/*Año bisiesto*/
+/*Anyo bisiesto*/
 function isLeap() {
   return ((currentDate.getFullYear() % 100 !== 0) && (currentDate.getFullYear() % 4 == 0)
     || (currentDate.getFullYear() % 400 == 0));
@@ -564,6 +486,82 @@ function startDay(monthNumber) {
   return ((start.getDay() - 1) == -1) ? 6 : start.getDay() - 1;
 }
 
+
+
+
+/**Es llamada cada vez que pulsamos 'buscar' e inicia un nuevo calendario */
+function writeMonths() {
+  let year = currentDate.getFullYear();
+  let grupo = cbo_grupo.value;
+  let subgrupo = cbo_subgrupo.value;
+
+  //establee el anyo fecha del sistema
+  txt_year.value = year;
+
+  //resetear las variables para los libres
+  restablecerVariablesLibres(year, grupo);
+
+   //obtener la lista de dias subgrupo del anyo
+   const lista_dias_subgrupo = getListaDiasSubgrupo(grupo, subgrupo, year);
+
+   //obtener lista con los dias subgrupo comunes
+   const lista_dias_subgrupo_comunes = getSubgrupoComunes(grupo, subgrupo, year);
+
+  //escribir en cada mes sus dias de la semana
+  let com;
+  let dia_subgrupo = undefined;
+  let dia_subgrupo_comun = undefined;
+  for (let a = 0; a < tabla.length; a++) {
+    com = tabla[a];
+
+    //anade las etiquetas del dia de la semana
+    for (let i = 0; i < dias_semana.length; i++) {
+      com.innerHTML += ` <div class="dates_week color_dias"> ${dias_semana[i]} </div> `;
+    } 
+
+    //deja los espacios en blanco antes de escribir el dia 1 de cada mes
+    let dia_inicial = startDay(a + 1);
+    for (let i = dia_inicial; i > 0; i--) {
+      com.innerHTML += ` <div class="dates_week"></div> `;
+    }
+
+    //escribe los numeros de los dias
+    let total_dias_mes = getTotalDays(a + 1);
+    
+    for (let i = 1; i <= total_dias_mes; i++) {
+      let tipo_dia;
+
+      //si son libres se le anade la clase libres
+      tipo_dia = establecerLibres(a, i);
+        
+      //si son subgrupo clase sub, el tipo_dia no debe estar definido como libre
+        if(tipo_dia == undefined){
+          if(dia_subgrupo == undefined){
+              dia_subgrupo = lista_dias_subgrupo.shift();
+          }
+          tipo_dia = comprobarDiaSubgrupo(dia_subgrupo, a, i);  //dia, mes, dia_del_mes
+          if(tipo_dia != undefined){
+            dia_subgrupo = undefined;
+          }
+        }
+
+      //para los subgrupos de fines de semana amarillo=sub1 naranja=sub2
+      if(tipo_dia == undefined){
+        if(dia_subgrupo_comun == undefined){
+            dia_subgrupo_comun = lista_dias_subgrupo_comunes.shift();
+        }
+        tipo_dia = comprobarDiaSubgrupoComun(dia_subgrupo_comun, a, i, subgrupo);
+        if(tipo_dia != undefined){
+          dia_subgrupo_comun = undefined;
+        }
+      }
+        
+      com.innerHTML += ` <div class="dates_week ${tipo_dia}">${i}</div> `;
+    }
+  }
+}
+
+
 /** Inicia un nuevo calendario borrando el anterior */
 function nuevaFecha() {
   let dates = Array.from(document.getElementsByClassName("dates_week"));
@@ -574,3 +572,8 @@ function nuevaFecha() {
   currentDate = new Date(nuevo_year + '-' + 01 + '-' + 01);
   writeMonths();
 }
+
+
+
+/*Escribe el calendario con la fecha actual del sistema */
+writeMonths();
