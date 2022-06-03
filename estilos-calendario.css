@@ -46,6 +46,7 @@ nav{
 nav .txt_year{
   background: white;
   text-align: center;
+   width: 115px;
 }
 
 nav .btn{
@@ -73,9 +74,6 @@ nav .btn{
   font-size: 1em;
 }
 
-.txt_year{
-  width: 115px;
-}
 
 select{
   margin-left: 7px;
